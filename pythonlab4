@@ -1,0 +1,7 @@
+idade = int(input("Idade: "))
+tem_ingresso = input("Tem ingresso? (s/n): ")
+
+if idade >= 18 and tem_ingresso == "s":
+    print("Entrada permitida.")
+else:
+    print("Entrada negada.")
