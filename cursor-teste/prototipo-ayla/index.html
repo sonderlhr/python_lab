@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ayla | Assistente Virtual MoveFIT</title>
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --navy-2: #16365f;
+      --coral: #ff6b4a;
+      --coral-dark: #e45332;
+      --sand: #f4f0e8;
+      --card: #ffffff;
+      --ink: #1c2430;
+      --muted: #5c6775;
+      --line: #e4ddd2;
+      --ok: #1f7a4d;
+      --user: #0b1f3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--sand);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(160deg, var(--coral), #ffb199);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.04em;
+    }
+    header h1 { margin: 0; font-size: 1.15rem; }
+    header p { margin: 2px 0 0; color: #c9d4e3; font-size: 0.86rem; }
+    .badge {
+      margin-left: auto;
+      border: 1px solid #35557e;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      color: #d5e4f7;
+    }
+    main {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 14px;
+    }
+    .persona, .chat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+    .persona { padding: 16px; height: fit-content; }
+    .avatar {
+      height: 210px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 50% 38%, #f3c7a8 0 46px, transparent 47px),
+        radial-gradient(circle at 50% 22%, #3a2418 0 28px, transparent 29px),
+        linear-gradient(#0b1f3a, #0b1f3a) 50% 78% / 92px 70px no-repeat,
+        linear-gradient(#ff6b4a, #ff6b4a) 50% 92% / 120px 18px no-repeat,
+        linear-gradient(180deg, #d9e6f5, #f7f1ea);
+      border: 1px solid var(--line);
+      position: relative;
+    }
+    .avatar span {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      background: white;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .persona h2 { margin: 12px 0 4px; font-size: 1.25rem; }
+    .persona .role { margin: 0 0 10px; color: var(--coral-dark); font-weight: 700; font-size: 0.88rem; }
+    .persona ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.88rem; }
+    .persona li { margin: 4px 0; }
+    .chat { display: flex; flex-direction: column; min-height: 640px; }
+    .log {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 520px;
+      overflow: auto;
+    }
+    .bubble {
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      line-height: 1.4;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+    }
+    .bot { background: #f6f7f9; border: 1px solid var(--line); align-self: flex-start; }
+    .user { background: var(--user); color: white; align-self: flex-end; }
+    .meta { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
+    .quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 14px 10px;
+    }
+    .quick button, .send button, .demo button {
+      border: 1px solid #f0c2b6;
+      background: #fff5f2;
+      color: #9a3412;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .quick button:hover, .send button:hover, .demo button:hover { background: #ffe8e1; }
+    form.send {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+    }
+    input[type="text"] {
+      flex: 1;
+      border: 1px solid #d9d3c8;
+      border-radius: 12px;
+      padding: 12px;
+      font: inherit;
+      font-size: 1rem;
+    }
+    .send button {
+      background: var(--coral);
+      color: white;
+      border-color: var(--coral);
+      font-weight: 700;
+    }
+    .demo {
+      padding: 0 14px 14px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .demo strong { color: var(--ink); }
+    @media (max-width: 800px) {
+      main { grid-template-columns: 1fr; }
+      .badge { display: none; }
+      .chat { min-height: 70vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="mark">MF</div>
+    <div>
+      <h1>MoveFIT · Ayla</h1>
+      <p>Assistente virtual de séries e agendamento · protótipo navegável</p>
+    </div>
+    <div class="badge">Atendimento 24h · academia ou remoto</div>
+  </header>
+  <main>
+    <aside class="persona">
+      <div class="avatar" role="img" aria-label="Ilustração institucional da assistente Ayla, uniforme azul-marinho e coral da MoveFIT"><span>Ayla · 27</span></div>
+      <h2>Ayla</h2>
+      <p class="role">Tom amigável e jovem</p>
+      <ul>
+        <li>Série segundo o nível do aluno</li>
+        <li>Aquecimento, principal e secundário</li>
+        <li>Agendamento com matrícula ativa</li>
+        <li>Sem orientação em caso de dor</li>
+      </ul>
+    </aside>
+    <section class="chat">
+      <div class="log" id="log" aria-live="polite"></div>
+      <div class="quick" id="quick"></div>
+      <form class="send" id="form">
+        <label for="msg" class="visually-hidden" style="position:absolute;left:-999px">Mensagem</label>
+        <input id="msg" type="text" placeholder="Escreva sua mensagem" autocomplete="off" />
+        <button type="submit">Enviar</button>
+      </form>
+      <div class="demo">
+        Matrículas de teste: <strong>20261001</strong> Ana · iniciante,
+        <strong>20261002</strong> Bruno · intermediário,
+        <strong>20261003</strong> Carla · avançado,
+        <strong>20261004</strong> Diego · inativa,
+        <strong>20260000</strong> inexistente.
+      </div>
+    </section>
+  </main>
+  <script>
+    const alunos = {
+      "20261001": { nome: "Ana Lima", nivel: "iniciante", ativa: true },
+      "20261002": { nome: "Bruno Dias", nivel: "intermediário", ativa: true },
+      "20261003": { nome: "Carla Nunes", nivel: "avançado", ativa: true },
+      "20261004": { nome: "Diego Prado", nivel: "iniciante", ativa: false }
+    };
+
+    const grade = [
+      { id: "A01", label: "Segunda 07:00 · Musculação orientada" },
+      { id: "A02", label: "Terça 19:00 · Condicionamento" },
+      { id: "A03", label: "Quarta 07:00 · Musculação orientada" },
+      { id: "A05", label: "Sexta 18:00 · Treino de força" },
+      { id: "A06", label: "Sábado 09:00 · Aula de iniciantes" }
+    ];
+
+    const treinos = {
+      condicionamento: {
+        iniciante: {
+          aquecimento: "5 min na bike ergométrica, ritmo leve; círculos de braço por 30 segundos; mobilidade de quadril por 30 segundos.",
+          principal: "Leg press 3x10 com carga leve; puxada frontal 3x10; supino na máquina 3x10. Descanse cerca de 60 segundos. A carga em quilos fica com o instrutor da sala.",
+          secundario: "Prancha no joelho 3x15 segundos e alongamento de posterior de coxa e peitoral, 20 segundos de cada lado."
+        },
+        intermediário: {
+          aquecimento: "Polichinelos por 60 segundos, mobilidade de tornozelo e 2 minutos de corda ou marcha rápida.",
+          principal: "Agachamento livre 3x12; flexão tradicional 3x8; afundo alternado 3x8 de cada perna; remada no cabo 3x12.",
+          secundario: "Bike ou esteira leve por 10 minutos e prancha lateral 2x20 segundos de cada lado."
+        },
+        avançado: {
+          aquecimento: "Polichinelos 45 segundos, elevação de joelhos 30 segundos e inchworm 6 repetições.",
+          principal: "Agachamento com pausa 4x10; afundo reverso 4x8 de cada perna; puxada frontal 4x8; desenvolvimento na máquina 4x8.",
+          secundario: "8 ciclos de 40 segundos de trote e 20 segundos de marcha. Feche com alongamento de quadril e peitoral."
+        }
+      },
+      forca: {
+        iniciante: {
+          aquecimento: "5 minutos de bike leve e mobilidade de ombro.",
+          principal: "Cadeira extensora 3x12; cadeira flexora 3x12; supino máquina 3x10; remada baixa 3x10. Ritmo controlado, carga leve.",
+          secundario: "Prancha 3x20 segundos e alongamento global de 3 minutos."
+        },
+        intermediário: {
+          aquecimento: "5 minutos de bike e 10 agachamentos sem carga.",
+          principal: "Leg press 4x8; supino máquina 4x8; puxada frontal 4x8; desenvolvimento 3x10. Pausa de 90 segundos.",
+          secundario: "Prancha 3x30 segundos e farmer walk leve, 3 vezes de 20 metros, se a unidade tiver halteres."
+        },
+        avançado: {
+          aquecimento: "5 minutos de bike moderada e mobilidade de torácica.",
+          principal: "Agachamento livre 5x5 em ritmo lento; supino com halteres 4x6; remada curvada 4x8; desenvolvimento 4x6. A carga continua sendo definida com o instrutor.",
+          secundario: "Core: prancha 3x40 segundos e alongamento de flexores de quadril."
+        }
+      }
+    };
+
+    const state = {
+      flow: null,
+      step: null,
+      matricula: null,
+      aluno: null,
+      objetivo: "condicionamento",
+      querAquecimento: true,
+      horario: null,
+      protocolo: 1001,
+      simulacao: []
+    };
+
+    const log = document.getElementById("log");
+    const quick = document.getElementById("quick");
+    const form = document.getElementById("form");
+    const input = document.getElementById("msg");
+
+    function say(text, who) {
+      const el = document.createElement("div");
+      el.className = "bubble " + who;
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = who === "bot" ? "Ayla" : "Você";
+      el.appendChild(meta);
+      el.appendChild(document.createTextNode(text));
+      log.appendChild(el);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function setQuick(options) {
+      quick.innerHTML = "";
+      options.forEach((label) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = label;
+        b.addEventListener("click", () => submit(label));
+        quick.appendChild(b);
+      });
+    }
+
+    function normalizar(texto) {
+      return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    function serieDe(aluno, objetivo) {
+      const bloco = treinos[objetivo] || treinos.condicionamento;
+      return bloco[aluno.nivel] || bloco.iniciante;
+    }
+
+    function pedirMatricula(flow) {
+      state.flow = flow;
+      state.step = "matricula";
+      say("Informe seu número de matrícula para prosseguir.", "bot");
+      setQuick([]);
+    }
+
+    function abrirSerie() {
+      state.objetivo = "condicionamento";
+      state.flow = "serie";
+      state.step = "aquecimento-opcao";
+      say("Posso ajudar! Você deseja começar com aquecimento?", "bot");
+      setQuick(["Sim", "Não", "Quero treino de força"]);
+    }
+
+    function abrirAgenda() {
+      state.flow = "agenda";
+      pedirMatricula("agenda");
+    }
+
+    function tratarMatricula(texto) {
+      const digitos = texto.replace(/\D/g, "");
+      const aluno = alunos[digitos];
+      if (!aluno) {
+        say("Não localizei essa matrícula. Posso responder dúvidas gerais sobre aquecimento, níveis e horários. Série personalizada e agendamento ficam disponíveis quando a matrícula estiver ativa.", "bot");
+        state.retorno = state.flow;
+        state.flow = null;
+        state.step = null;
+        setQuick(["Quero uma dúvida", "Tentar outra matrícula", "Ver horários da grade"]);
+        return;
+      }
+      if (!aluno.ativa) {
+        say("A matrícula de " + aluno.nome + " está inativa. A recepção regulariza o acesso. Enquanto isso, tiro dúvidas gerais, sem montar série nem reservar horário.", "bot");
+        state.retorno = state.flow;
+        state.flow = null;
+        state.step = null;
+        setQuick(["Quero uma dúvida", "Ver horários da grade"]);
+        return;
+      }
+      state.matricula = digitos;
+      state.aluno = aluno;
+      say("Matrícula de " + aluno.nome + " localizada. Nível em cadastro: " + aluno.nivel + ".", "bot");
+      if (state.flow === "agenda") {
+        state.step = "escolher-horario";
+        say("Estes horários estão livres:\n" + grade.map((g, i) => (i + 1) + ". " + g.label).join("\n") + "\nQual deles você quer?", "bot");
+        setQuick(grade.map((g) => g.id + " " + g.label));
+        return;
+      }
+      if (state.flow === "nivel") {
+        state.step = "confirmar-nivel";
+        say("Seguimos no nível " + aluno.nivel + " ou você quer atualizar para iniciante, intermediário ou avançado?", "bot");
+        setQuick(["Manter " + aluno.nivel, "Iniciante", "Intermediário", "Avançado"]);
+        return;
+      }
+      if (state.flow === "so-aquecimento") {
+        state.step = "confirmar-aquecimento";
+        say("Indico o aquecimento no nível " + aluno.nivel + "?", "bot");
+        setQuick(["Sim", "Mudar para iniciante", "Mudar para intermediário", "Mudar para avançado"]);
+        return;
+      }
+      state.step = "confirmar-nivel";
+      say("Seguimos nesse nível para a série de " + state.objetivo + "?", "bot");
+      setQuick(["Sim", "Mudar para iniciante", "Mudar para intermediário", "Mudar para avançado"]);
+    }
+
+    function entregarSerie() {
+      const bloco = serieDe(state.aluno, state.objetivo);
+      const partes = [];
+      if (state.querAquecimento) partes.push("Aquecimento\n" + bloco.aquecimento);
+      partes.push("Treino principal\n" + bloco.principal);
+      partes.push("Treino secundário\n" + bloco.secundario);
+      say(partes.join("\n\n"), "bot");
+      say("Se quiser, eu conduzo essa série passo a passo. Também posso agendar uma aula orientada.", "bot");
+      state.step = "pos-serie";
+      state.simulacao = [
+        state.querAquecimento ? "Passo 1 · Aquecimento. " + bloco.aquecimento + " Me avise quando terminar." : null,
+        "Próximo passo · Treino principal. " + bloco.principal + " Me avise quando terminar.",
+        "Último passo · Treino secundário. " + bloco.secundario + " Quando concluir, a sessão simulada está encerrada."
+      ].filter(Boolean);
+      setQuick(["Conduzir passo a passo", "Agendar aula", "Encerrar"]);
+    }
+
+    function intençõesLivres(texto) {
+      const t = normalizar(texto);
+      if (/dor|lesao|tontura|enjoo|desmaio|mal-?estar|doendo/.test(t)) {
+        say("Com relato de dor, lesão ou mal-estar eu não monto série nem indico exercício. Pare a atividade e fale com o profissional de Educação Física da MoveFIT ou com um serviço de saúde. Posso só explicar como procurar a recepção.", "bot");
+        state.flow = null;
+        state.step = null;
+        setQuick(["Onde fica a recepção?", "Encerrar"]);
+        return true;
+      }
+      if (/recepcao/.test(t)) {
+        say("A recepção da MoveFIT fica na entrada da unidade, no balcão ao lado da catraca. O protótipo não substitui esse atendimento presencial.", "bot");
+        setQuick(["Quero uma série de condicionamento", "Agendar horário de aula"]);
+        return true;
+      }
+      if (/agendar|horario|marcar aula/.test(t)) {
+        abrirAgenda();
+        return true;
+      }
+      if (/forca/.test(t) && /serie|treino|quero/.test(t)) {
+        state.objetivo = "forca";
+        state.querAquecimento = true;
+        pedirMatricula("serie");
+        return true;
+      }
+      if (/serie|condicionamento|montar treino|quero treinar/.test(t)) {
+        abrirSerie();
+        return true;
+      }
+      if (/aquecimento/.test(t)) {
+        state.objetivo = "condicionamento";
+        state.querAquecimento = true;
+        state.flow = "so-aquecimento";
+        pedirMatricula("so-aquecimento");
+        return true;
+      }
+      if (/nivel/.test(t)) {
+        state.flow = "nivel";
+        pedirMatricula("nivel");
+        return true;
+      }
+      if (/duvida|como funciona|o que voce faz|quem e voce|horarios da grade/.test(t)) {
+        say("Eu sou a Ayla, assistente da MoveFIT. Ajudo a montar uma série com aquecimento, treino principal e treino secundário, conforme o nível iniciante, intermediário ou avançado, e também agendo aula. A matrícula é necessária para série personalizada e para reservar horário. Dúvida geral não precisa de matrícula.", "bot");
+        setQuick(["Quero uma série de condicionamento", "Agendar horário de aula", "Ver horários da grade"]);
+        return true;
+      }
+      if (/tentar outra matricula/.test(t)) {
+        pedirMatricula(state.retorno || state.flow || "serie");
+        return true;
+      }
+      if (/montar a serie completa/.test(t)) {
+        if (state.aluno && state.matricula) {
+          state.flow = "serie";
+          state.objetivo = state.objetivo || "condicionamento";
+          state.querAquecimento = true;
+          state.step = "confirmar-nivel";
+          say("Vou completar a série de " + state.objetivo + " no nível " + state.aluno.nivel + ". Seguimos assim?", "bot");
+          setQuick(["Sim", "Mudar para iniciante", "Mudar para intermediário", "Mudar para avançado"]);
+          return true;
+        }
+        abrirSerie();
+        return true;
+      }
+      if (/ver horarios da grade/.test(t)) {
+        say("Grade de demonstração:\n" + grade.map((g) => g.label).join("\n") + "\nPara reservar, eu preciso da matrícula ativa.", "bot");
+        setQuick(["Agendar horário de aula", "Quero uma série de condicionamento"]);
+        return true;
+      }
+      return false;
+    }
+
+    function submit(raw) {
+      const texto = raw.trim();
+      if (!texto) return;
+      say(texto, "user");
+      input.value = "";
+      const t = normalizar(texto);
+
+      if (/dor|lesao|tontura|enjoo|desmaio|mal-?estar|doendo/.test(t)) {
+        say("Com relato de dor, lesão ou mal-estar eu não monto série nem indico exercício. Pare a atividade e fale com o profissional de Educação Física da MoveFIT ou com um serviço de saúde. Posso só explicar como procurar a recepção.", "bot");
+        state.flow = null;
+        state.step = null;
+        setQuick(["Onde fica a recepção?", "Encerrar"]);
+        return;
+      }
+
+      if (state.step === "matricula") {
+        if (/[0-9]{6,}/.test(texto)) {
+          tratarMatricula(texto);
+          return;
+        }
+        say("O número de matrícula tem só dígitos. Pode enviar de novo?", "bot");
+        return;
+      }
+
+      if (state.step === "aquecimento-opcao") {
+        if (t.startsWith("sim") || t === "quero comecar com aquecimento") {
+          state.querAquecimento = true;
+          pedirMatricula("serie");
+          return;
+        }
+        if (t.startsWith("nao") || t.includes("sem aquecimento")) {
+          state.querAquecimento = false;
+          say("Tudo bem. Vou seguir para o treino principal e o secundário.", "bot");
+          pedirMatricula("serie");
+          return;
+        }
+        if (t.includes("forca")) {
+          state.objetivo = "forca";
+          state.querAquecimento = true;
+          pedirMatricula("serie");
+          return;
+        }
+      }
+
+      if (state.step === "confirmar-aquecimento") {
+        const nivel = ["iniciante", "intermediário", "avançado"].find((n) => t.includes(normalizar(n)));
+        if (nivel) state.aluno = { ...state.aluno, nivel };
+        if (t === "sim" || nivel) {
+          const bloco = serieDe(state.aluno, state.objetivo);
+          say("Modalidade de aquecimento para o nível " + state.aluno.nivel + ":\n" + bloco.aquecimento, "bot");
+          state.step = null;
+          state.flow = null;
+          setQuick(["Montar a série completa", "Agendar horário de aula"]);
+          return;
+        }
+      }
+
+      if (state.step === "confirmar-nivel" && state.flow !== "nivel") {
+        if (t === "sim" || t.startsWith("seguir")) {
+          entregarSerie();
+          return;
+        }
+        const nivel = ["iniciante", "intermediário", "avançado"].find((n) => t.includes(normalizar(n)));
+        if (nivel) {
+          state.aluno = { ...state.aluno, nivel };
+          say("Atualizei o nível desta sessão para " + nivel + ". A alteração fica só no protótipo.", "bot");
+          entregarSerie();
+          return;
+        }
+      }
+
+      if (state.step === "confirmar-nivel" && state.flow === "nivel") {
+        if (t.startsWith("manter")) {
+          say("Nível mantido: " + state.aluno.nivel + ". Quando quiser, monto a série em cima dele.", "bot");
+          state.step = null;
+          state.flow = null;
+          setQuick(["Quero uma série de condicionamento", "Agendar horário de aula"]);
+          return;
+        }
+        const nivel = ["iniciante", "intermediário", "avançado"].find((n) => t.includes(normalizar(n)));
+        if (nivel) {
+          state.aluno = { ...state.aluno, nivel };
+          say("Nível desta sessão atualizado para " + nivel + ".", "bot");
+          state.step = null;
+          state.flow = null;
+          setQuick(["Quero uma série de condicionamento", "Agendar horário de aula"]);
+          return;
+        }
+      }
+
+      if (state.step === "escolher-horario") {
+        const item = grade.find((g) => t.includes(g.id.toLowerCase()) || t.includes(normalizar(g.label).slice(0, 12)) || grade.indexOf(g) + 1 === Number(texto));
+        const porIndice = grade[Number(texto) - 1];
+        const escolhido = item || porIndice;
+        if (!escolhido) {
+          say("Não encontrei esse horário. Escolha um código da lista, como A02.", "bot");
+          return;
+        }
+        state.horario = escolhido;
+        state.step = "confirmar-agenda";
+        say("Confirma o agendamento de " + state.aluno.nome + " em " + escolhido.label + "?", "bot");
+        setQuick(["Confirmar", "Escolher outro", "Cancelar"]);
+        return;
+      }
+
+      if (state.step === "confirmar-agenda") {
+        if (t.startsWith("confirmar") || t === "sim") {
+          const protocolo = "AGD-" + state.protocolo++;
+          say("Agendamento registrado. Protocolo " + protocolo + " · " + state.horario.label + " · matrícula " + state.matricula + ". Chegue alguns minutos antes e procure o instrutor da sala.", "bot");
+          state.step = null;
+          state.flow = null;
+          setQuick(["Quero uma série de condicionamento", "Encerrar"]);
+          return;
+        }
+        if (t.includes("outro")) {
+          state.step = "escolher-horario";
+          say("Sem problema. Qual horário da lista você prefere?", "bot");
+          setQuick(grade.map((g) => g.id + " " + g.label));
+          return;
+        }
+        say("Agendamento cancelado. Nenhum horário foi reservado.", "bot");
+        state.step = null;
+        state.flow = null;
+        setQuick(["Agendar horário de aula", "Quero uma série de condicionamento"]);
+        return;
+      }
+
+      if (state.step === "pos-serie") {
+        if (t.includes("passo") || t.includes("conduzir") || t === "simular") {
+          state.step = "simulacao";
+          state.simIndex = 0;
+          say(state.simulacao[0], "bot");
+          setQuick(["Terminei este passo"]);
+          return;
+        }
+        if (t.includes("agendar")) {
+          abrirAgenda();
+          return;
+        }
+        if (t.includes("encerrar")) {
+          say("Sessão encerrada. Quando voltar, é só chamar. Bons treinos.", "bot");
+          state.step = null;
+          state.flow = null;
+          setQuick(["Quero uma série de condicionamento", "Agendar horário de aula"]);
+          return;
+        }
+      }
+
+      if (state.step === "simulacao") {
+        state.simIndex += 1;
+        if (state.simIndex < state.simulacao.length) {
+          say(state.simulacao[state.simIndex], "bot");
+          setQuick(["Terminei este passo"]);
+          return;
+        }
+        say("Série simulada concluída. Se sentir dor, pare e chame o instrutor. Quer agendar uma aula orientada?", "bot");
+        state.step = null;
+        state.flow = null;
+        setQuick(["Agendar horário de aula", "Encerrar"]);
+        return;
+      }
+
+      if (intençõesLivres(texto)) return;
+
+      say("Posso montar sua série, explicar o aquecimento, informar treino principal e secundário, registrar seu nível ou agendar uma aula. O que você precisa agora?", "bot");
+      setQuick(["Quero uma série de condicionamento", "Agendar horário de aula", "Quero uma dúvida"]);
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      submit(input.value);
+    });
+
+    say("Oi, eu sou a Ayla, assistente da MoveFIT. Posso montar sua série, separar aquecimento, treino principal e treino secundário, ou agendar uma aula. O atendimento vale na academia e no celular, a qualquer hora.", "bot");
+    setQuick(["Quero uma série de condicionamento", "Agendar horário de aula", "Quero uma dúvida"]);
+  </script>
+</body>
+</html>

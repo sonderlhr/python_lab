@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Documento do Projeto — Assistente Virtual para Academia MoveFIT</title>
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --coral: #ff6b4a;
+      --sand: #f6f3ee;
+      --ink: #1c2430;
+      --muted: #4d5866;
+      --line: #d9d3c8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #e7e2d9;
+      color: var(--ink);
+      font-family: "Segoe UI", Calibri, sans-serif;
+      line-height: 1.45;
+    }
+    .sheet {
+      max-width: 920px;
+      margin: 24px auto;
+      background: white;
+      padding: 42px 48px 56px;
+      box-shadow: 0 8px 30px rgba(11, 31, 58, 0.08);
+    }
+    .cover {
+      min-height: 920px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 10px solid var(--navy);
+    }
+    .kicker {
+      color: var(--coral);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+    h1 { font-size: 2.15rem; line-height: 1.15; margin: 12px 0; color: var(--navy); }
+    h2 {
+      color: var(--navy);
+      border-bottom: 3px solid var(--coral);
+      padding-bottom: 6px;
+      margin-top: 2.2rem;
+      page-break-after: avoid;
+    }
+    h3 { color: var(--navy); margin-bottom: 0.3rem; page-break-after: avoid; }
+    p, li { font-size: 1.02rem; }
+    .meta { color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; page-break-inside: avoid; }
+    th, td { border: 1px solid var(--line); padding: 8px 10px; vertical-align: top; text-align: left; }
+    th { background: var(--navy); color: white; font-weight: 650; }
+    td.cod { white-space: nowrap; font-weight: 700; color: var(--navy); width: 78px; }
+    .note, .dialogue, .uc {
+      background: var(--sand);
+      border-left: 4px solid var(--coral);
+      padding: 12px 14px;
+      margin: 12px 0 18px;
+    }
+    .dialogue p { margin: 0.35rem 0; }
+    a { color: #9a3412; }
+    ol.toc { line-height: 1.7; }
+    svg text { font-family: "Segoe UI", Calibri, sans-serif; }
+    .small { font-size: 0.92rem; color: var(--muted); }
+    @media print {
+      body { background: white; }
+      .sheet { margin: 0; box-shadow: none; max-width: none; padding: 0; }
+      h2 { break-before: page; }
+      h2.keep { break-before: auto; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <article class="sheet">
+    <header class="cover">
+      <div>
+        <p class="kicker">Fatec Zona Sul · Centro Paula Souza · Governo do Estado de São Paulo</p>
+        <p>Análise e Desenvolvimento de Sistemas<br />Engenharia de Software I · Atividade Avaliativa</p>
+        <h1>Assistente Virtual para Academia</h1>
+        <p style="font-size:1.25rem;margin-top:0">Documento do projeto · MoveFIT · assistente Ayla</p>
+        <p class="meta">Construção de assistente virtual com Inteligência Artificial Generativa para oferta de séries de exercícios, orientação de treino e agendamento de aula.</p>
+      </div>
+      <div>
+        <p><strong>Professor:</strong> Prof. Ms. Josenyr S. Rosa</p>
+        <p><strong>Grupo:</strong> ________________________________</p>
+        <p><strong>Integrantes:</strong> ________________________________</p>
+        <p><strong>Data:</strong> outubro de 2026</p>
+        <p class="small">Para entregar em PDF: abra este arquivo no navegador e use Imprimir → Salvar como PDF. O protótipo navegável está em <a href="prototipo-ayla/index.html">prototipo-ayla/index.html</a>.</p>
+      </div>
+    </header>
+
+    <h2 class="keep">Sumário — roteiro da descrição do projeto</h2>
+    <ol class="toc">
+      <li><a href="#escopo">Escopo do projeto</a></li>
+      <li><a href="#objetivos">Objetivos</a></li>
+      <li><a href="#segmento">Segmento social</a></li>
+      <li><a href="#resultados">Resultados esperados</a></li>
+      <li><a href="#rf">Requisitos funcionais</a></li>
+      <li><a href="#rnf">Requisitos não funcionais</a></li>
+      <li><a href="#rn">Regras de negócio</a></li>
+      <li><a href="#uc">Casos de uso (UML)</a></li>
+      <li><a href="#preco">Precificação</a></li>
+      <li><a href="#proto">Prototipação</a></li>
+    </ol>
+    <p>O enunciado da atividade também pede descrição da assistente, arquitetura, tecnologias e fluxos de conversação. Esses conteúdos estão na persona, na arquitetura e na seção de fluxos, ligadas aos itens 8 e 10.</p>
+
+    <h2 id="escopo">1. Escopo do projeto</h2>
+    <p>O projeto cobre a construção do protótipo da assistente virtual da academia <strong>MoveFIT</strong>, com Inteligência Artificial Generativa. A assistente, de nome <strong>Ayla</strong>, atende o aluno na academia ou em canal remoto, 24 horas, e conduz em linguagem natural a oferta de série de exercícios.</p>
+    <p>Entram neste protótipo:</p>
+    <ul>
+      <li>identidade visual e personalidade digital da Ayla;</li>
+      <li>conversa em português, com dúvidas básicas sobre o atendimento;</li>
+      <li>agendamento de horário de aula;</li>
+      <li>série de exercícios conforme a necessidade do aluno;</li>
+      <li>modalidades de aquecimento, treino principal e treino secundário;</li>
+      <li>nível de condicionamento: iniciante, intermediário ou avançado;</li>
+      <li>fluxos de exercício simulado;</li>
+      <li>identificação por número de matrícula;</li>
+      <li>documentação técnica e protótipo navegável no navegador.</li>
+    </ul>
+    <p>Ficam para uma etapa posterior, fora deste protótipo: cobrança e mensalidade, controle de catraca, aplicativo de loja, prescrição de carga em quilos e qualquer orientação diante de dor, lesão ou condição de saúde. A base de matrículas, a grade e o catálogo de treinos usados na demonstração são simulados.</p>
+    <div class="note">
+      <strong>Contextualização.</strong> A MoveFIT quer agilizar a montagem da série junto ao aluno. A equipe de ADS, na disciplina de Engenharia de Software I, foi chamada para o protótipo. O instrutor da unidade continua responsável pela sala. A Ayla organiza o primeiro atendimento e o agendamento.
+    </div>
+
+    <h2 id="objetivos">2. Objetivos</h2>
+    <h3>2.1 Objetivo geral</h3>
+    <p>Desenvolver o protótipo de uma assistente virtual para a MoveFIT, com Inteligência Artificial Generativa, capaz de ofertar série de exercícios e acompanhar o aluno em linguagem natural, na academia ou à distância, a qualquer hora.</p>
+    <h3>2.2 Objetivos específicos</h3>
+    <ul>
+      <li>interagir com o aluno em linguagem natural;</li>
+      <li>responder dúvidas básicas sobre série, nível e agendamento;</li>
+      <li>executar fluxos de exercícios simulados;</li>
+      <li>definir identidade visual e personalidade digital da assistente;</li>
+      <li>agendar horário de aula para matrícula ativa;</li>
+      <li>ofertar série segundo a necessidade e o nível informado;</li>
+      <li>informar aquecimento, treino principal e treino secundário;</li>
+      <li>entregar documentação e protótipo navegável para demonstração.</li>
+    </ul>
+
+    <h2 id="segmento">3. Segmento social</h2>
+    <p>O atendimento é dirigido a quem treina na MoveFIT e precisa de orientação básica sem depender do horário da recepção ou do instrutor.</p>
+    <table>
+      <thead><tr><th>Segmento</th><th>Por que a assistente chega nesse grupo</th></tr></thead>
+      <tbody>
+        <tr><td>Alunos matriculados, jovens e adultos</td><td>Público principal. Já têm matrícula e usam a Ayla para série e horário.</td></tr>
+        <tr><td>Iniciantes</td><td>Precisam de frase curta, aquecimento explícito e volume menor.</td></tr>
+        <tr><td>Intermediários e avançados</td><td>Recebem treino principal e secundário de acordo com o objetivo da sessão: condicionamento ou força.</td></tr>
+        <tr><td>Quem treina fora do horário comercial</td><td>O canal remoto e a disponibilidade 24 horas cobrem o período sem recepção.</td></tr>
+        <tr><td>Quem prefere texto a pedir ajuda em voz alta na sala</td><td>A conversa é individual, sem comparação de corpos e sem meta de emagrecimento.</td></tr>
+      </tbody>
+    </table>
+    <p>Recorte social pretendido: frequentadores de academia de bairro na zona sul de São Paulo, em geral classes B e C, que não contratam personal trainer. A Ayla amplia o acesso à organização básica do treino. O profissional de Educação Física segue como responsável técnico da unidade.</p>
+
+    <h2 id="resultados">4. Resultados esperados</h2>
+    <ol>
+      <li>Persona Ayla descrita, com tom de voz, comunicação e visual institucional.</li>
+      <li>Aluno conclui, sem manual, série ou agendamento pela interface conversacional.</li>
+      <li>Cinco fluxos de conversa completos, demonstráveis no protótipo.</li>
+      <li>Série coerente com o nível: aquecimento, treino principal e treino secundário.</li>
+      <li>Agendamento só depois de matrícula ativa e de confirmação do aluno.</li>
+      <li>Dúvida geral disponível mesmo sem matrícula.</li>
+      <li>Relato de dor ou lesão interrompe a série e encaminha a um profissional.</li>
+      <li>Atendimento previsto para a academia e para o celular, 24 horas.</li>
+      <li>Documento do projeto, protótipo navegável e roteiro para vídeo ou apresentação.</li>
+      <li>Estimativa de custo para a MoveFIT decidir uma implantação.</li>
+    </ol>
+    <p>Critério de aceite do protótipo: em uma conversa, o aluno informa a matrícula, confirma o nível e recebe a série, ou escolhe um horário da grade e recebe um protocolo. A fala da Ayla permanece curta, amigável e com um próximo passo.</p>
+
+    <h2 id="rf">5. Requisitos funcionais</h2>
+    <table>
+      <thead><tr><th>Código</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td class="cod">RF01</td><td>O aluno conversa com a assistente em linguagem natural, em português.</td></tr>
+        <tr><td class="cod">RF02</td><td>A assistente responde dúvidas básicas sobre série, níveis, aquecimento e agendamento.</td></tr>
+        <tr><td class="cod">RF03</td><td>A assistente agenda horário de aula a partir da grade disponível.</td></tr>
+        <tr><td class="cod">RF04</td><td>A assistente oferta série de exercícios segundo a necessidade declarada pelo aluno.</td></tr>
+        <tr><td class="cod">RF05</td><td>A assistente informa a modalidade de aquecimento da sessão.</td></tr>
+        <tr><td class="cod">RF06</td><td>A assistente informa o treino principal.</td></tr>
+        <tr><td class="cod">RF07</td><td>A assistente informa o treino secundário, complementar ao principal.</td></tr>
+        <tr><td class="cod">RF08</td><td>A assistente identifica o nível de condicionamento: iniciante, intermediário ou avançado.</td></tr>
+        <tr><td class="cod">RF09</td><td>A assistente solicita o número de matrícula antes da série personalizada e antes do agendamento.</td></tr>
+        <tr><td class="cod">RF10</td><td>A assistente executa fluxo de exercício simulado, passo a passo.</td></tr>
+        <tr><td class="cod">RF11</td><td>A assistente mantém a personalidade e a identidade visual da Ayla em todo o atendimento.</td></tr>
+        <tr><td class="cod">RF12</td><td>O mesmo atendimento funciona no canal da academia e no canal remoto.</td></tr>
+        <tr><td class="cod">RF13</td><td>O agendamento só é gravado depois da confirmação explícita do aluno.</td></tr>
+        <tr><td class="cod">RF14</td><td>Matrícula não localizada ou inativa limita o atendimento a informação geral.</td></tr>
+        <tr><td class="cod">RF15</td><td>Diante de dor, lesão ou mal-estar, a assistente interrompe a série e orienta a procurar um profissional.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="rnf">6. Requisitos não funcionais</h2>
+    <table>
+      <thead><tr><th>Código</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td class="cod">RNF01</td><td>Disponibilidade de 24 horas, todos os dias, nos dois canais.</td></tr>
+        <tr><td class="cod">RNF02</td><td>Na implantação, as falas abertas saem de um modelo de IA generativa preso à persona e às regras de negócio. No protótipo de sala, os fluxos já nascem dessas regras, para a demo ser estável.</td></tr>
+        <tr><td class="cod">RNF03</td><td>Interface conversacional, com campo de texto e atalhos dos serviços principais.</td></tr>
+        <tr><td class="cod">RNF04</td><td>Meta de resposta inicial em até 5 segundos em rede estável.</td></tr>
+        <tr><td class="cod">RNF05</td><td>Fluxo principal concluído em até oito falas do aluno, sem manual.</td></tr>
+        <tr><td class="cod">RNF06</td><td>Contraste legível, texto claro e opção de repetir a orientação com mais calma. A paleta institucional é azul-marinho e coral sobre fundo claro.</td></tr>
+        <tr><td class="cod">RNF07</td><td>A matrícula é dado pessoal (LGPD): serve para identificar o aluno no atendimento e não é exibida além do necessário.</td></tr>
+        <tr><td class="cod">RNF08</td><td>Idioma da interface e das respostas: português do Brasil.</td></tr>
+        <tr><td class="cod">RNF09</td><td>Protótipo utilizável em navegador de computador e de celular.</td></tr>
+        <tr><td class="cod">RNF10</td><td>Horário fora da grade e série fora do catálogo do nível não são oferecidos.</td></tr>
+        <tr><td class="cod">RNF11</td><td>Cada resposta traz um próximo passo objetivo.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="rn">7. Regras de negócio</h2>
+    <table>
+      <thead><tr><th>Código</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td class="cod">RN01</td><td>Série personalizada e agendamento exigem matrícula cadastrada e ativa.</td></tr>
+        <tr><td class="cod">RN02</td><td>Matrícula inexistente ou inativa recebe só informação geral.</td></tr>
+        <tr><td class="cod">RN03</td><td>Níveis aceitos: iniciante, intermediário e avançado.</td></tr>
+        <tr><td class="cod">RN04</td><td>Sem nível definido, a assistente pergunta o nível antes de montar a série.</td></tr>
+        <tr><td class="cod">RN05</td><td>A sessão completa segue a ordem aquecimento, treino principal e treino secundário. O aluno pode pedir só uma parte.</td></tr>
+        <tr><td class="cod">RN06</td><td>Iniciante: menos volume, pausa maior e carga leve. O protótipo não fecha peso em quilos.</td></tr>
+        <tr><td class="cod">RN07</td><td>Intermediário: volume moderado, condicionamento e força combinados conforme o objetivo.</td></tr>
+        <tr><td class="cod">RN08</td><td>Avançado: mais séries e variação. Relato de lesão continua vedado à assistente.</td></tr>
+        <tr><td class="cod">RN09</td><td>Só é possível agendar um horário que exista na grade.</td></tr>
+        <tr><td class="cod">RN10</td><td>A reserva só existe depois do “confirmar” do aluno. Desistência não grava horário.</td></tr>
+        <tr><td class="cod">RN11</td><td>Dor, lesão, tontura ou mal-estar encerram a orientação de exercício e direcionam o aluno ao profissional de Educação Física ou a um serviço de saúde.</td></tr>
+        <tr><td class="cod">RN12</td><td>A assistente não avalia corpo, não promete emagrecimento e não compara alunos.</td></tr>
+        <tr><td class="cod">RN13</td><td>Cada sessão trata um objetivo: condicionamento ou força.</td></tr>
+        <tr><td class="cod">RN14</td><td>Dúvida básica não exige matrícula.</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="uc">8. Casos de uso (UML)</h2>
+    <h3>8.1 Atores</h3>
+    <table>
+      <thead><tr><th>Ator</th><th>Papel</th></tr></thead>
+      <tbody>
+        <tr><td>Aluno</td><td>Pede série, dúvida, nível ou agendamento.</td></tr>
+        <tr><td>Cadastro de matrículas</td><td>Informa se a matrícula existe e se está ativa, e devolve nome e nível.</td></tr>
+        <tr><td>Grade de aulas</td><td>Lista horários que podem ser reservados.</td></tr>
+        <tr><td>Profissional de Educação Física</td><td>Recebe o encaminhamento quando há dor, lesão ou pedido clínico.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8.2 Diagrama de casos de uso</h3>
+    <p class="small">Linha contínua: ator participa do caso. Tracejado: include (sempre acontece). Pontilhado: extend (só em condição).</p>
+    <svg viewBox="0 0 980 690" width="100%" role="img" aria-label="Diagrama de casos de uso da assistente Ayla">
+      <rect x="168" y="36" width="620" height="630" rx="16" fill="#fff" stroke="#0b1f3a" stroke-width="2"/>
+      <text x="478" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#0b1f3a">Assistente virtual Ayla — MoveFIT</text>
+
+      <g fill="#fff" stroke="#0b1f3a" stroke-width="1.4">
+        <ellipse cx="330" cy="120" rx="118" ry="36"/>
+        <ellipse cx="330" cy="210" rx="118" ry="36"/>
+        <ellipse cx="330" cy="300" rx="118" ry="36"/>
+        <ellipse cx="330" cy="400" rx="118" ry="36"/>
+        <ellipse cx="330" cy="560" rx="125" ry="40"/>
+        <ellipse cx="620" cy="180" rx="130" ry="42"/>
+        <ellipse cx="620" cy="290" rx="120" ry="34"/>
+        <ellipse cx="620" cy="370" rx="120" ry="34"/>
+        <ellipse cx="620" cy="450" rx="120" ry="34"/>
+        <ellipse cx="620" cy="560" rx="128" ry="40"/>
+      </g>
+      <g fill="#0b1f3a" font-size="13" text-anchor="middle">
+        <text x="330" y="116">Responder</text><text x="330" y="132">dúvida básica</text>
+        <text x="330" y="206">Identificar aluno</text><text x="330" y="222">pela matrícula</text>
+        <text x="330" y="296">Informar nível de</text><text x="330" y="312">condicionamento</text>
+        <text x="330" y="396">Agendar horário</text><text x="330" y="412">de aula</text>
+        <text x="330" y="556">Encaminhar ao</text><text x="330" y="572">profissional</text>
+        <text x="620" y="174">Ofertar série</text><text x="620" y="190">de exercícios</text>
+        <text x="620" y="286">Informar</text><text x="620" y="302">aquecimento</text>
+        <text x="620" y="366">Informar treino</text><text x="620" y="382">principal</text>
+        <text x="620" y="446">Informar treino</text><text x="620" y="462">secundário</text>
+        <text x="620" y="556">Executar exercício</text><text x="620" y="572">simulado</text>
+      </g>
+
+      <g stroke="#0b1f3a" fill="none" stroke-width="1.3">
+        <line x1="92" y1="300" x2="212" y2="120"/>
+        <line x1="92" y1="300" x2="212" y2="210"/>
+        <line x1="92" y1="300" x2="212" y2="300"/>
+        <line x1="92" y1="320" x2="212" y2="400"/>
+        <line x1="92" y1="330" x2="490" y2="180"/>
+        <line x1="92" y1="360" x2="492" y2="560"/>
+      </g>
+      <g stroke="#9a3412" fill="none" stroke-width="1.3" stroke-dasharray="6 4">
+        <line x1="490" y1="180" x2="448" y2="210"/>
+        <line x1="500" y1="200" x2="448" y2="300"/>
+        <line x1="620" y1="222" x2="620" y2="256"/>
+        <line x1="620" y1="324" x2="620" y2="336"/>
+        <line x1="620" y1="404" x2="620" y2="416"/>
+        <line x1="448" y1="400" x2="448" y2="230"/>
+      </g>
+      <g stroke="#0b1f3a" fill="none" stroke-width="1.3" stroke-dasharray="2 4">
+        <line x1="530" y1="540" x2="455" y2="560"/>
+        <line x1="448" y1="200" x2="400" y2="530"/>
+      </g>
+      <g stroke="#0b1f3a" fill="none">
+        <line x1="788" y1="110" x2="748" y2="190"/>
+        <line x1="788" y1="200" x2="448" y2="390"/>
+        <line x1="860" y1="470" x2="455" y2="560"/>
+      </g>
+
+      <g font-size="12" fill="#1c2430" text-anchor="middle">
+        <circle cx="48" cy="250" r="16" fill="none" stroke="#0b1f3a"/>
+        <line x1="48" y1="266" x2="48" y2="318" stroke="#0b1f3a"/>
+        <line x1="48" y1="286" x2="22" y2="308" stroke="#0b1f3a"/>
+        <line x1="48" y1="286" x2="74" y2="308" stroke="#0b1f3a"/>
+        <line x1="48" y1="318" x2="28" y2="356" stroke="#0b1f3a"/>
+        <line x1="48" y1="318" x2="68" y2="356" stroke="#0b1f3a"/>
+        <text x="48" y="378" font-weight="700">Aluno</text>
+
+        <circle cx="910" cy="78" r="14" fill="none" stroke="#0b1f3a"/>
+        <line x1="910" y1="92" x2="910" y2="132" stroke="#0b1f3a"/>
+        <line x1="910" y1="108" x2="890" y2="124" stroke="#0b1f3a"/>
+        <line x1="910" y1="108" x2="930" y2="124" stroke="#0b1f3a"/>
+        <line x1="910" y1="132" x2="896" y2="158" stroke="#0b1f3a"/>
+        <line x1="910" y1="132" x2="924" y2="158" stroke="#0b1f3a"/>
+        <text x="910" y="176">Cadastro de</text><text x="910" y="190">matrículas</text>
+
+        <circle cx="910" cy="230" r="14" fill="none" stroke="#0b1f3a"/>
+        <line x1="910" y1="244" x2="910" y2="284" stroke="#0b1f3a"/>
+        <line x1="910" y1="260" x2="890" y2="276" stroke="#0b1f3a"/>
+        <line x1="910" y1="260" x2="930" y2="276" stroke="#0b1f3a"/>
+        <line x1="910" y1="284" x2="896" y2="310" stroke="#0b1f3a"/>
+        <line x1="910" y1="284" x2="924" y2="310" stroke="#0b1f3a"/>
+        <text x="910" y="328">Grade de aulas</text>
+
+        <circle cx="910" cy="470" r="14" fill="none" stroke="#0b1f3a"/>
+        <line x1="910" y1="484" x2="910" y2="524" stroke="#0b1f3a"/>
+        <line x1="910" y1="500" x2="890" y2="516" stroke="#0b1f3a"/>
+        <line x1="910" y1="500" x2="930" y2="516" stroke="#0b1f3a"/>
+        <line x1="910" y1="524" x2="896" y2="550" stroke="#0b1f3a"/>
+        <line x1="910" y1="524" x2="924" y2="550" stroke="#0b1f3a"/>
+        <text x="910" y="568">Profissional</text><text x="910" y="582">de Ed. Física</text>
+      </g>
+      <text x="478" y="652" text-anchor="middle" font-size="12" fill="#4d5866">Tracejado coral = include · pontilhado = extend (simulação ou encaminhamento por dor)</text>
+    </svg>
+
+    <h3>8.3 Especificação dos casos principais</h3>
+
+    <div class="uc">
+      <h3>UC01 — Identificar aluno pela matrícula</h3>
+      <p><strong>Ator:</strong> Aluno, com apoio do Cadastro de matrículas. <strong>Incluído por</strong> ofertar série e agendar aula.</p>
+      <p><strong>Pré-condição:</strong> a base simulada de matrículas está carregada. <strong>Pós-condição:</strong> aluno identificado ou atendimento reduzido a dúvida geral.</p>
+      <ol>
+        <li>A Ayla pede o número de matrícula.</li>
+        <li>O aluno informa os dígitos.</li>
+        <li>O cadastro devolve nome, nível e situação.</li>
+        <li>A Ayla confirma o nome e o nível.</li>
+      </ol>
+      <p><strong>Alternativo A1:</strong> matrícula inexistente. A Ayla explica e oferece só dúvida geral.</p>
+      <p><strong>Alternativo A2:</strong> matrícula inativa. A Ayla orienta a recepção e não monta série nem reserva horário.</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC02 — Ofertar série de exercícios</h3>
+      <p><strong>Ator:</strong> Aluno. <strong>Inclui:</strong> identificar aluno, informar nível e, na sessão completa, aquecimento, treino principal e treino secundário.</p>
+      <p><strong>Pré-condição:</strong> aluno em conversa com a Ayla. <strong>Pós-condição:</strong> série do objetivo e do nível apresentada, ou fluxo encerrado sem série.</p>
+      <ol>
+        <li>O aluno pede uma série e diz a necessidade, por exemplo condicionamento.</li>
+        <li>A Ayla pergunta se a sessão começa pelo aquecimento.</li>
+        <li>O aluno responde.</li>
+        <li>Include UC01.</li>
+        <li>A Ayla confirma o nível do cadastro. O aluno mantém ou atualiza entre os três níveis.</li>
+        <li>A Ayla entrega aquecimento (se aceito), treino principal e treino secundário do catálogo.</li>
+        <li>A Ayla oferece a condução passo a passo ou o agendamento.</li>
+      </ol>
+      <p><strong>Alternativo A1:</strong> o aluno recusa o aquecimento. A série segue no principal e no secundário.</p>
+      <p><strong>Alternativo A2:</strong> o aluno pede só força. O objetivo da sessão passa a ser força (RN13).</p>
+      <p><strong>Extend:</strong> exercício simulado, se o aluno aceitar a condução. Encaminhamento ao profissional, se surgir relato de dor.</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC03 — Agendar horário de aula</h3>
+      <p><strong>Ator:</strong> Aluno, com a Grade de aulas. <strong>Inclui</strong> identificar aluno.</p>
+      <p><strong>Pré-condição:</strong> grade carregada. <strong>Pós-condição:</strong> protocolo emitido ou nenhuma reserva gravada.</p>
+      <ol>
+        <li>O aluno pede para agendar.</li>
+        <li>Include UC01, com matrícula ativa.</li>
+        <li>A Ayla lista os horários da grade.</li>
+        <li>O aluno escolhe um.</li>
+        <li>A Ayla mostra o resumo e pede confirmação.</li>
+        <li>O aluno confirma.</li>
+        <li>O sistema grava a reserva e devolve o protocolo AGD.</li>
+      </ol>
+      <p><strong>Alternativo A1:</strong> o aluno pede outro horário antes de confirmar. Nada é gravado ainda.</p>
+      <p><strong>Alternativo A2:</strong> o aluno cancela. A Ayla encerra sem reserva (RN10).</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC04 — Responder dúvida básica</h3>
+      <p><strong>Ator:</strong> Aluno. Não inclui matrícula (RN14).</p>
+      <p>O aluno pergunta o que a Ayla faz, quais são os níveis ou quais horários existem. A Ayla responde em poucas frases e oferece série ou agendamento. A lista de horários, sozinha, não reserva vaga.</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC05 — Executar exercício simulado</h3>
+      <p><strong>Extend</strong> de ofertar série. Depois da série montada, o aluno pede a condução. A Ayla entrega um passo, espera o aluno dizer que terminou e segue até o último bloco. No fim, lembra que dor interrompe a sessão.</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC06 — Informar nível de condicionamento</h3>
+      <p>O aluno pede para ver ou mudar o nível. Depois da matrícula ativa, a Ayla mostra o nível do cadastro. A atualização desta entrega vale para a sessão do protótipo: iniciante, intermediário ou avançado.</p>
+    </div>
+
+    <div class="uc">
+      <h3>UC07 — Encaminhar ao profissional</h3>
+      <p><strong>Extend</strong> de qualquer fluxo de exercício. Se o texto traz dor, lesão, tontura ou mal-estar, a Ayla não sugere exercício. Orienta parar e procurar o profissional de Educação Física da MoveFIT ou um serviço de saúde.</p>
+    </div>
+
+    <h3>8.4 Rastreabilidade</h3>
+    <table>
+      <thead><tr><th>Requisito</th><th>Caso de uso</th><th>Regra</th></tr></thead>
+      <tbody>
+        <tr><td>RF02, RF12</td><td>UC04 Dúvida</td><td>RN14</td></tr>
+        <tr><td>RF04, RF05, RF06, RF07, RF11</td><td>UC02 Ofertar série</td><td>RN03 a RN08, RN12, RN13</td></tr>
+        <tr><td>RF08</td><td>UC06 Nível</td><td>RN03, RN04</td></tr>
+        <tr><td>RF09, RF14</td><td>UC01 Identificar</td><td>RN01, RN02</td></tr>
+        <tr><td>RF03, RF13</td><td>UC03 Agendar</td><td>RN01, RN09, RN10</td></tr>
+        <tr><td>RF10</td><td>UC05 Simulado</td><td>RN05, RN11</td></tr>
+        <tr><td>RF15</td><td>UC07 Encaminhar</td><td>RN11</td></tr>
+      </tbody>
+    </table>
+
+    <h3>8.5 Fluxos de conversação</h3>
+    <p>Há cinco fluxos completos, no mesmo texto do protótipo. Matrículas de demonstração: <strong>20261001</strong> Ana Lima, iniciante, ativa; <strong>20261002</strong> Bruno Dias, intermediário, ativa; <strong>20261003</strong> Carla Nunes, avançado, ativa; <strong>20261004</strong> Diego Prado, inativa; <strong>20260000</strong> inexistente.</p>
+
+    <h3>Fluxo 1 — Série de condicionamento</h3>
+    <div class="dialogue">
+      <p><strong>Aluno:</strong> Quero uma série de condicionamento</p>
+      <p><strong>Ayla:</strong> Posso ajudar! Você deseja começar com aquecimento?</p>
+      <p><strong>Aluno:</strong> Sim</p>
+      <p><strong>Ayla:</strong> Informe seu número de matrícula para prosseguir.</p>
+      <p><strong>Aluno:</strong> 20261001</p>
+      <p><strong>Ayla:</strong> Matrícula de Ana Lima localizada. Nível em cadastro: iniciante. Seguimos nesse nível para a série de condicionamento?</p>
+      <p><strong>Aluno:</strong> Sim</p>
+      <p><strong>Ayla:</strong> Aquecimento: 5 min na bike ergométrica, ritmo leve; círculos de braço por 30 segundos; mobilidade de quadril por 30 segundos.</p>
+      <p><strong>Ayla:</strong> Treino principal: leg press 3x10 com carga leve; puxada frontal 3x10; supino na máquina 3x10. Descanse cerca de 60 segundos. A carga em quilos fica com o instrutor da sala.</p>
+      <p><strong>Ayla:</strong> Treino secundário: prancha no joelho 3x15 segundos e alongamento de posterior de coxa e peitoral, 20 segundos de cada lado.</p>
+      <p><strong>Ayla:</strong> Se quiser, eu conduzo essa série passo a passo. Também posso agendar uma aula orientada.</p>
+    </div>
+
+    <h3>Fluxo 2 — Agendar horário de aula</h3>
+    <div class="dialogue">
+      <p><strong>Aluno:</strong> Agendar horário de aula</p>
+      <p><strong>Ayla:</strong> Informe seu número de matrícula para prosseguir.</p>
+      <p><strong>Aluno:</strong> 20261002</p>
+      <p><strong>Ayla:</strong> Matrícula de Bruno Dias localizada. Nível em cadastro: intermediário. Estes horários estão livres: Segunda 07:00 musculação orientada; Terça 19:00 condicionamento; Quarta 07:00 musculação orientada; Sexta 18:00 treino de força; Sábado 09:00 aula de iniciantes. Qual deles você quer?</p>
+      <p><strong>Aluno:</strong> A02 Terça 19:00 · Condicionamento</p>
+      <p><strong>Ayla:</strong> Confirma o agendamento de Bruno Dias em Terça 19:00 · Condicionamento?</p>
+      <p><strong>Aluno:</strong> Confirmar</p>
+      <p><strong>Ayla:</strong> Agendamento registrado. Protocolo AGD-1001 · Terça 19:00 · Condicionamento · matrícula 20261002. Chegue alguns minutos antes e procure o instrutor da sala.</p>
+    </div>
+
+    <h3>Fluxo 3 — Só o aquecimento</h3>
+    <div class="dialogue">
+      <p><strong>Aluno:</strong> Quero saber o aquecimento</p>
+      <p><strong>Ayla:</strong> Informe seu número de matrícula para prosseguir.</p>
+      <p><strong>Aluno:</strong> 20261002</p>
+      <p><strong>Ayla:</strong> Matrícula de Bruno Dias localizada. Nível em cadastro: intermediário. Indico o aquecimento no nível intermediário?</p>
+      <p><strong>Aluno:</strong> Sim</p>
+      <p><strong>Ayla:</strong> Modalidade de aquecimento para o nível intermediário: polichinelos por 60 segundos, mobilidade de tornozelo e 2 minutos de corda ou marcha rápida.</p>
+    </div>
+
+    <h3>Fluxo 4 — Treino de força no nível avançado</h3>
+    <div class="dialogue">
+      <p><strong>Aluno:</strong> Quero uma série de condicionamento</p>
+      <p><strong>Ayla:</strong> Posso ajudar! Você deseja começar com aquecimento?</p>
+      <p><strong>Aluno:</strong> Quero treino de força</p>
+      <p><strong>Ayla:</strong> Informe seu número de matrícula para prosseguir.</p>
+      <p><strong>Aluno:</strong> 20261003</p>
+      <p><strong>Ayla:</strong> Matrícula de Carla Nunes localizada. Nível em cadastro: avançado. Seguimos nesse nível para a série de força?</p>
+      <p><strong>Aluno:</strong> Sim</p>
+      <p><strong>Ayla:</strong> Aquecimento: 5 minutos de bike moderada e mobilidade de torácica. Treino principal: agachamento livre 5x5 em ritmo lento; supino com halteres 4x6; remada curvada 4x8; desenvolvimento 4x6. A carga continua sendo definida com o instrutor. Treino secundário: prancha 3x40 segundos e alongamento de flexores de quadril.</p>
+    </div>
+
+    <h3>Fluxo 5 — Dúvida geral e matrícula inexistente</h3>
+    <div class="dialogue">
+      <p><strong>Aluno:</strong> Quero uma dúvida</p>
+      <p><strong>Ayla:</strong> Eu sou a Ayla, assistente da MoveFIT. Ajudo a montar uma série com aquecimento, treino principal e treino secundário, conforme o nível iniciante, intermediário ou avançado, e também agendo aula. A matrícula é necessária para série personalizada e para reservar horário. Dúvida geral não precisa de matrícula.</p>
+      <p><strong>Aluno:</strong> Quero uma série de condicionamento</p>
+      <p><strong>Ayla:</strong> Posso ajudar! Você deseja começar com aquecimento?</p>
+      <p><strong>Aluno:</strong> Sim</p>
+      <p><strong>Ayla:</strong> Informe seu número de matrícula para prosseguir.</p>
+      <p><strong>Aluno:</strong> 20260000</p>
+      <p><strong>Ayla:</strong> Não localizei essa matrícula. Posso responder dúvidas gerais sobre aquecimento, níveis e horários. Série personalizada e agendamento ficam disponíveis quando a matrícula estiver ativa.</p>
+    </div>
+
+    <p>Fluxos de apoio já cobertos no protótipo: matrícula inativa <strong>20261004</strong> (Diego Prado) cai na RN02; texto com “dor” ou “lesão” cai na RN11 e não devolve exercício; “conduzir passo a passo” percorre aquecimento, principal e secundário, um bloco por vez.</p>
+
+    <h3>8.6 Catálogo usado nos fluxos</h3>
+    <p>A carga em quilos não faz parte do protótipo. O instrutor da sala fecha o peso. A tabela abaixo é a mesma do arquivo do protótipo.</p>
+    <table>
+      <thead><tr><th>Objetivo e nível</th><th>Aquecimento</th><th>Principal</th><th>Secundário</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Condicionamento · iniciante</td>
+          <td>5 min de bike leve, círculos de braço 30 s, mobilidade de quadril 30 s</td>
+          <td>Leg press 3x10, puxada 3x10, supino máquina 3x10, pausa de 60 s</td>
+          <td>Prancha no joelho 3x15 s e alongamento de posterior e peitoral</td>
+        </tr>
+        <tr>
+          <td>Condicionamento · intermediário</td>
+          <td>Polichinelos 60 s, mobilidade de tornozelo, corda ou marcha 2 min</td>
+          <td>Agachamento 3x12, flexão 3x8, afundo 3x8, remada no cabo 3x12</td>
+          <td>Bike ou esteira 10 min e prancha lateral 2x20 s</td>
+        </tr>
+        <tr>
+          <td>Condicionamento · avançado</td>
+          <td>Polichinelos 45 s, joelhos altos 30 s, inchworm 6 repetições</td>
+          <td>Agachamento com pausa 4x10, afundo reverso 4x8, puxada 4x8, desenvolvimento 4x8</td>
+          <td>8 ciclos de 40 s de trote e 20 s de marcha, mais alongamento</td>
+        </tr>
+        <tr>
+          <td>Força · iniciante</td>
+          <td>5 min de bike leve e mobilidade de ombro</td>
+          <td>Extensora 3x12, flexora 3x12, supino máquina 3x10, remada baixa 3x10</td>
+          <td>Prancha 3x20 s e alongamento de 3 min</td>
+        </tr>
+        <tr>
+          <td>Força · intermediário</td>
+          <td>5 min de bike e 10 agachamentos sem carga</td>
+          <td>Leg press 4x8, supino máquina 4x8, puxada 4x8, desenvolvimento 3x10, pausa de 90 s</td>
+          <td>Prancha 3x30 s</td>
+        </tr>
+        <tr>
+          <td>Força · avançado</td>
+          <td>5 min de bike moderada e mobilidade de torácica</td>
+          <td>Agachamento 5x5, supino com halteres 4x6, remada curvada 4x8, desenvolvimento 4x6</td>
+          <td>Prancha 3x40 s e alongamento de flexores de quadril</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="preco">9. Precificação</h2>
+    <p>Os valores são estimativa de outubro de 2026 para a MoveFIT enxergar o custo de sair do trabalho de sala e implantar o protótipo em uma unidade. A hora usa referência de mercado júnior em São Paulo. Na disciplina, a equipe é de estudantes: o esforço abaixo é acadêmico e o custo direto da apresentação pode ficar só no cenário A.</p>
+
+    <h3>Cenário A — entrega acadêmica</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Protótipo local e documentação, sem API paga</td><td>R$ 0</td></tr>
+        <tr><td>Domínio, se a equipe quiser publicar</td><td>R$ 40 por ano</td></tr>
+        <tr><td>Imagem da persona em ferramenta de IA no plano gratuito</td><td>R$ 0</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Cenário B — desenvolvimento do protótipo em valor de mercado</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Horas</th><th>R$/hora</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Requisitos e documentação</td><td>36</td><td>45</td><td>R$ 1.620</td></tr>
+        <tr><td>Persona e interface</td><td>24</td><td>50</td><td>R$ 1.200</td></tr>
+        <tr><td>Fluxos conversacionais</td><td>48</td><td>55</td><td>R$ 2.640</td></tr>
+        <tr><td>Regras, casos de uso e catálogo</td><td>20</td><td>50</td><td>R$ 1.000</td></tr>
+        <tr><td>Testes dos fluxos</td><td>16</td><td>45</td><td>R$ 720</td></tr>
+        <tr><td>Gestão e apresentação</td><td>12</td><td>45</td><td>R$ 540</td></tr>
+        <tr><td><strong>Subtotal · 156 horas</strong></td><td></td><td></td><td><strong>R$ 7.720</strong></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Operação estimada de uma unidade, por mês</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Premissa</th><th>Mensal</th></tr></thead>
+      <tbody>
+        <tr><td>API de IA generativa</td><td>Cerca de 1.500 conversas, média de 8 turnos</td><td>R$ 180</td></tr>
+        <tr><td>Hospedagem</td><td>Site e função para guardar a chave da API</td><td>R$ 60</td></tr>
+        <tr><td>Manutenção leve</td><td>4 horas para ajuste de catálogo e grade</td><td>R$ 220</td></tr>
+        <tr><td><strong>Total mensal</strong></td><td></td><td><strong>R$ 460</strong></td></tr>
+      </tbody>
+    </table>
+    <p>Três meses de operação no cenário B, somados ao desenvolvimento e a um domínio, ficam em torno de <strong>R$ 9.140</strong> (7.720 + 40 de domínio + 3 × 460). O catálogo e a grade continuam validados pelo profissional da unidade. Esse número não é proposta comercial fechada.</p>
+
+    <h2 id="proto">10. Prototipação</h2>
+    <p>O protótipo é navegável, de fidelidade média, em uma única página. Arquivo: <a href="prototipo-ayla/index.html">prototipo-ayla/index.html</a>. Abra no navegador. Não precisa de instalação nem de chave de API.</p>
+    <p>A tela tem o cartão da Ayla (nome, tom e limites do atendimento) e a conversa, com atalhos: série de condicionamento, agendar aula e dúvida. O mesmo fluxo responde a texto livre, por exemplo “quero uma série de condicionamento”.</p>
+    <table>
+      <thead><tr><th>Tela</th><th>O que o aluno vê</th><th>Próximo passo</th></tr></thead>
+      <tbody>
+        <tr><td>Abertura</td><td>Cabeçalho MoveFIT, ilustração institucional, saudação da Ayla</td><td>Atalho ou texto</td></tr>
+        <tr><td>Série</td><td>Pergunta do aquecimento, matrícula, confirmação do nível, três blocos do treino</td><td>Conduzir passo a passo ou agendar</td></tr>
+        <tr><td>Simulação</td><td>Um bloco por vez, com botão “Terminei este passo”</td><td>Fim da sessão ou agendamento</td></tr>
+        <tr><td>Agenda</td><td>Lista A01, A02, A03, A05 e A06 e pedido de confirmação</td><td>Protocolo AGD ou cancelamento</td></tr>
+        <tr><td>Exceção</td><td>Matrícula 20260000 ou 20261004, ou frase com “dor”</td><td>Dúvida geral ou encaminhamento</td></tr>
+      </tbody>
+    </table>
+
+    <h3>10.1 Roteiro curto para o vídeo</h3>
+    <ol>
+      <li>Abrir o protótipo e ler a saudação.</li>
+      <li>Executar o fluxo 1 com a matrícula 20261001.</li>
+      <li>Pedir “Conduzir passo a passo” e avançar os três blocos.</li>
+      <li>Agendar a A02 com a matrícula 20261002 e confirmar.</li>
+      <li>Mostrar a matrícula 20260000 e uma frase com “dor no joelho”, para as regras RN02 e RN11.</li>
+    </ol>
+
+    <h3>10.2 Persona digital da Ayla</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Definição</th></tr></thead>
+      <tbody>
+        <tr><td>Nome</td><td>Ayla</td></tr>
+        <tr><td>Idade aparente</td><td>27 anos</td></tr>
+        <tr><td>Tom de voz</td><td>Amigável e jovem, com clareza de academia, sem gíria fechada e sem tom clínico</td></tr>
+        <tr><td>Comunicação</td><td>Frases curtas, uma pergunta por vez, confirma o que entendeu, trata por “você” e sempre oferece o próximo passo</td></tr>
+        <tr><td>Pele</td><td>Morena</td></tr>
+        <tr><td>Cabelo</td><td>Castanho-escuro, liso, rabo de cavalo baixo</td></tr>
+        <tr><td>Olhos</td><td>Castanho-escuros</td></tr>
+        <tr><td>Rosto</td><td>Oval, sobrancelhas relaxadas</td></tr>
+        <tr><td>Expressão</td><td>Sorriso calmo e atento</td></tr>
+        <tr><td>Vestimenta</td><td>Jaqueta corta-vento azul-marinho com detalhe coral, top esportivo, legging preta, tênis branco, crachá “Ayla | MoveFIT”</td></tr>
+        <tr><td>Inclusão</td><td>Contraste alto e oferta de repetir a orientação com mais calma. O protótipo usa texto, então a leitura pode ser pausada pelo aluno</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>Prompt para a imagem obrigatória da atividade.</strong> Gere em uma ferramenta de IA e anexe o arquivo na entrega: “Retrato de meio corpo de uma assistente de academia chamada Ayla, mulher brasileira de aparência com cerca de 27 anos, pele morena, rosto oval, olhos castanho-escuros, cabelo castanho-escuro liso em rabo de cavalo baixo, sorriso calmo. Uniforme esportivo azul-marinho com detalhes coral, legging preta, tênis branco e crachá simples escrito Ayla. Fundo claro de recepção de academia, luz suave, fotografia realista, sem marcas reais, sem texto extra.”
+    </div>
+
+    <h3>10.3 Arquitetura e tecnologias</h3>
+    <p>O aluno fala com a interface. O orquestrador reconhece o pedido (série, aquecimento, nível, agenda, dúvida ou dor), aplica a regra de negócio e só então monta a resposta com o catálogo, a matrícula ou a grade.</p>
+    <table>
+      <thead><tr><th>Camada</th><th>No protótipo entregue</th><th>Na implantação na MoveFIT</th></tr></thead>
+      <tbody>
+        <tr><td>Interface</td><td>HTML, CSS e JavaScript em uma página</td><td>A mesma conversa no totem da academia e no celular</td></tr>
+        <tr><td>Orquestrador</td><td>Roteiro dos fluxos no navegador, com as RN fechadas</td><td>Serviço que chama matrícula, grade e catálogo antes de aceitar a fala</td></tr>
+        <tr><td>IA generativa</td><td>Prompt de sistema pronto para demonstrar em Gemini ou ChatGPT</td><td>Modelo generativo redige a fala da Ayla dentro do que o orquestrador liberou</td></tr>
+        <tr><td>Dados</td><td>Matrículas, grade e treinos simulados na página</td><td>Cadastro real da academia e grade da unidade</td></tr>
+      </tbody>
+    </table>
+    <p>O protótipo de sala não depende de chave de API, para o vídeo repetir o mesmo resultado. A camada generativa entra na redação. Ela não escolhe horário fora da grade nem série fora do nível. Prompt de sistema sugerido:</p>
+    <div class="note">
+      Você é a Ayla, assistente virtual da academia MoveFIT. Tom amigável e jovem, frases curtas, uma pergunta por vez, português do Brasil. Serviços: dúvida básica, série de condicionamento ou força, aquecimento, treino principal, treino secundário, nível iniciante, intermediário ou avançado, e agendamento. Peça matrícula antes de série personalizada e antes de agendar. Use somente o catálogo e a grade recebidos no contexto. Não invente peso em quilos. Não avalie corpo e não prometa emagrecimento. Se houver dor, lesão, tontura ou mal-estar, não indique exercício: oriente a parar e procurar o profissional de Educação Física ou um serviço de saúde.
+    </div>
+    <p>Na apresentação, o grupo pode colar esse prompt em uma IA generativa e repetir o fluxo 1, mostrando a diferença entre a conversa livre e o protótipo, que segura as regras.</p>
+
+    <h2>Referências</h2>
+    <p class="small">BRASIL. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais.</p>
+    <p class="small">PRESSMAN, Roger S.; MAXIM, Bruce R. <em>Engenharia de software</em>: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016.</p>
+    <p class="small">ROSA, Josenyr S. <em>Atividade avaliativa</em>: Assistente Virtual para Academia. Fatec Zona Sul, Engenharia de Software I.</p>
+    <p class="small">SOMMERVILLE, Ian. <em>Engenharia de software</em>. 10. ed. São Paulo: Pearson Education do Brasil, 2019.</p>
+  </article>
+</body>
+</html>
